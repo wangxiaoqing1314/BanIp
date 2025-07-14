@@ -8,8 +8,8 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 def request_waf(ip_list, rule_name, domain):
-    url = "https://yundun.console.aliyun.com:443/openapi/waf-openapi/2019-09-10/CreateProtectionModuleRule.json"
-    cookies = {
+    burp0_url = "https://yundun.console.aliyun.com:443/openapi/waf-openapi/2019-09-10/CreateProtectionModuleRule.json"
+    burp0_cookies = {
     your_cookies
     }
     burp0_headers = {
@@ -28,19 +28,19 @@ def request_waf(ip_list, rule_name, domain):
     }
     data_dict = {
         "Region": "cn",
-        "InstanceId": your_InstanceId,
+        "InstanceId": your_InstanceId,  //请求包中找“实例ID”
         "Domain": domain,
         "Rule": rule,
         "DefenseType": "ac_custom"
     }
     burp0_data = {
         "regionId": your_regionId,
-        "data": json.dumps(data_dict, ensure_ascii=False),
+        "data": json.dumps(data_dict, ensure_ascii=False),  //这一句不要改
         "secToken": your_secToken,
         "token": your_token,
         "collina": "your_collina"
     }
-    response = requests.post(burp0_url, headers=burp0_headers, cookies=burp0_cookies, data=burp0_data, proxies=proxy, verify=False)
+    response = requests.post(burp0_url, headers=burp0_headers, cookies=burp0_cookies, data=burp0_data, verify=False)
     print(f"Rule name: {rule_name}, Status: {response.status_code}, Response: {response.text}")
     return response.status_code
 
@@ -64,9 +64,9 @@ def main(txt_path, name_prefix, name_start):
 
 if __name__ == "__main__":
 
-    txt_path = "your_ip_list_file_path"
-    name_prefix = "your_rule_name_prefix"
+    txt_path = "your_ip_list_file_path"   //指定需要封禁ip的txt文件位置
+    name_prefix = "your_rule_name_prefix"   //规则名前缀，例如：202507014_
     # int
-    name_start = your_rule_name_prefix
+    name_start = your_rule_name_prefix   //序号（整数型），和前缀拼接，例如值为1时，生成：202507014_1、202507014_2、202507014_3
     main(txt_path, name_prefix, name_start)
 
